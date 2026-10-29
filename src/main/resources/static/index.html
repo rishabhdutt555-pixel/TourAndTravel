@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour & Travels Booking System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>✈️ Tour & Travels Booking System</h1>
+            <p>Your one-stop solution for amazing travel experiences</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('packages')">📦 Tour Packages</button>
+            <button class="tab-btn" onclick="showTab('bookings')">📅 My Bookings</button>
+            <button class="tab-btn" onclick="showTab('profile')">👤 My Profile</button>
+            <button class="tab-btn" onclick="showTab('admin')">🔧 Admin Panel</button>
+        </div>
+
+        <!-- Packages Tab -->
+        <div id="packagesTab" class="tab-content active">
+            <div class="section-header">
+                <h2>✨ Available Tour Packages</h2>
+                <div class="filters">
+                    <input type="text" id="searchInput" placeholder="🔍 Search by destination..." onkeyup="filterPackages()">
+                    <select id="sortBy" onchange="sortPackages()">
+                        <option value="price">Sort by Price</option>
+                        <option value="duration">Sort by Duration</option>
+                        <option value="name">Sort by Name</option>
+                    </select>
+                </div>
+            </div>
+            <div id="packagesList" class="packages-grid"></div>
+        </div>
+
+        <!-- Bookings Tab -->
+        <div id="bookingsTab" class="tab-content">
+            <div class="section-header">
+                <h2>📋 My Bookings</h2>
+                <button class="btn-secondary" onclick="refreshBookings()">🔄 Refresh</button>
+            </div>
+            <div id="bookingsList" class="bookings-list"></div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profileTab" class="tab-content">
+            <div class="profile-card">
+                <h2>👤 User Profile</h2>
+
+                <!-- Login -->
+                <div id="loginSection">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUsername" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter password">
+                    </div>
+                    <button class="btn-primary" onclick="login()">Login</button>
+                    <button class="btn-secondary" onclick="showRegister()">Register New Account</button>
+                    <p style="margin-top:15px;font-size:0.85rem;color:#94a3b8;">
+                        Demo: <strong>admin / admin123</strong> &nbsp;|&nbsp; <strong>sarvasav / travel123</strong>
+                    </p>
+                </div>
+
+                <!-- Register -->
+                <div id="registerSection" style="display:none;">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="regPhone" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="regUsername" placeholder="Choose username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPassword" placeholder="Choose password">
+                    </div>
+                    <button class="btn-primary" onclick="register()">Register</button>
+                    <button class="btn-secondary" onclick="showLogin()">Back to Login</button>
+                </div>
+
+                <!-- Profile Info -->
+                <div id="profileInfo" style="display:none;">
+                    <p><strong>Name:</strong> <span id="profileName"></span></p>
+                    <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+                    <p><strong>Phone:</strong> <span id="profilePhone"></span></p>
+                    <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+                    <p><strong>Role:</strong> <span id="profileRole"></span></p>
+                    <br>
+                    <button class="btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tab -->
+        <div id="adminTab" class="tab-content">
+            <div class="admin-card">
+                <h2>🔧 Admin Panel</h2>
+                <p style="color:#666;margin-bottom:20px;">Add new tour packages to the system</p>
+
+                <div class="form-group">
+                    <label>Package Name</label>
+                    <input type="text" id="packageName" placeholder="e.g., Paradise Beach Getaway">
+                </div>
+                <div class="form-group">
+                    <label>Destination</label>
+                    <input type="text" id="packageDestination" placeholder="e.g., Goa, India">
+                </div>
+                <div class="form-group">
+                    <label>Price (₹)</label>
+                    <input type="number" id="packagePrice" placeholder="e.g., 15000">
+                </div>
+                <div class="form-group">
+                    <label>Duration (Days)</label>
+                    <input type="number" id="packageDuration" placeholder="e.g., 5">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="packageDescription" rows="3" placeholder="Describe the tour package..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Image URL (optional)</label>
+                    <input type="text" id="packageImage" placeholder="https://example.com/image.jpg">
+                </div>
+                <button class="btn-primary" onclick="addPackage()">➕ Add Package</button>
+            </div>
+
+            <div class="admin-card" style="margin-top:20px;">
+                <h3>📊 System Statistics</h3>
+                <p><strong>Total Users:</strong> <span id="statUsers">—</span></p>
+                <p><strong>Total Packages:</strong> <span id="statPackages">—</span></p>
+                <p><strong>Total Bookings:</strong> <span id="statBookings">—</span></p>
+                <p><strong>Total Revenue:</strong> <span id="statRevenue">—</span></p>
+                <br>
+                <button class="btn-secondary" onclick="loadAdminStats()">🔄 Refresh Stats</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="script.js"></script>
+</body>
+</html>
